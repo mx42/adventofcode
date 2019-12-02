@@ -1,9 +1,6 @@
 module Main where
 
--- import Day1
-import Day2
-
--- TODO Day selection via args?
+import DayPicker
 
 main :: IO ()
-main = day2
+main = dayPicker

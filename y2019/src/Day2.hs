@@ -1,6 +1,5 @@
 module Day2
-  ( day2,
-    processInput
+  ( day2
   ) where
 
 import Data.List.Split

@@ -7,11 +7,14 @@ import System.Environment
 
 import Day1
 import Day2
+import Day3
 
+-- TODO Better way?
 load :: [String] -> IO ()
 load [] = putStrLn "Usage: script [day]"
 load ("1":_) = day1
 load ("2":_) = day2
+load ("3":_) = day3
 load _ = putStrLn "Unavailable date"
 
 dayPicker :: IO ()

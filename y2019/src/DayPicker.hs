@@ -10,6 +10,7 @@ import Day2
 import Day3
 import Day4
 import Day5
+import Day6
 
 -- TODO Better way?
 load :: [String] -> IO ()
@@ -19,6 +20,7 @@ load ("2":_) = day2
 load ("3":_) = day3
 load ("4":_) = day4
 load ("5":_) = day5
+load ("6":_) = day6
 load _ = putStrLn "Unavailable date"
 
 dayPicker :: IO ()

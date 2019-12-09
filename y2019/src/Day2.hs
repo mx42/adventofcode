@@ -1,36 +1,9 @@
-module Day2
-  ( day2
-  ) where
+module Day2 (day2) where
 
-import Data.List.Split
-
-replaceNth :: Int -> a -> [a] -> [a]
-replaceNth _ _ [] = []
-replaceNth n newVal (x:xs)
-  | n == 0 = newVal:xs
-  | otherwise = x:replaceNth (n-1) newVal xs
-
-processInput :: [Int] -> Int -> [Int]
-processInput input index
-  | opcode == 1 = let operand1 = input !! (input !! (index + 1))
-                      operand2 = input !! (input !! (index + 2))
-                      resultIndex = input !! (index + 3)
-                      result = operand1 + operand2
-                      newInput = replaceNth resultIndex result input
-                  in processInput newInput newIndex
-  | opcode == 2 = let operand1 = input !! (input !! (index + 1))
-                      operand2 = input !! (input !! (index + 2))
-                      resultIndex = input !! (index + 3)
-                      result = operand1 * operand2
-                      newInput = replaceNth resultIndex result input
-                  in processInput newInput newIndex
-  | opcode == 99 = input
-  | opcode > 0 = input
-  where opcode = input !! index
-        newIndex = index + 4
+import Intcode
 
 computeVerbNoun :: Int -> Int -> [Int] -> Int
-computeVerbNoun noun verb input = (processInput newInput 0) !! 0
+computeVerbNoun noun verb input = (fst (computer [] newInput [] 0)) !! 0
   where newInput = replaceNth 1 noun . replaceNth 2 verb $ input
 
 bruteforce :: Int -> Int -> [Int] -> Int -> Int
@@ -46,7 +19,7 @@ day2 = do
   putStr "Enter input >"
   input <- getLine
   putStrLn ""
-  let intCodes = map (read :: String -> Int) (splitOn "," input)
+  let intCodes = parseProgram input
 
   putStr "Part 1: "
   print (computeVerbNoun 12 2 intCodes)

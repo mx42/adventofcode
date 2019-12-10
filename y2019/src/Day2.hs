@@ -2,8 +2,14 @@ module Day2 (day2) where
 
 import Intcode
 
+replaceNth :: Int -> a -> [a] -> [a]
+replaceNth _ _ [] = []
+replaceNth n newVal (x:xs)
+  | n == 0 = newVal:xs
+  | otherwise = x:replaceNth (n-1) newVal xs
+
 computeVerbNoun :: Int -> Int -> [Int] -> Int
-computeVerbNoun noun verb input = (fst (computer [] newInput [] 0)) !! 0
+computeVerbNoun noun verb input = (runProgramV1 newInput) !! 0
   where newInput = replaceNth 1 noun . replaceNth 2 verb $ input
 
 bruteforce :: Int -> Int -> [Int] -> Int -> Int

@@ -5,7 +5,7 @@ import Intcode
 
 processProgram :: [Int] -> [Int] -> Int
 processProgram program inputs = head outputs
-  where (_, outputs) = computer inputs program [] 0
+  where outputs = runProgramV2 inputs program
 
 chainProcesses :: [Int] -> [Int] -> Int -> Int
 chainProcesses program (phase:phases) signal

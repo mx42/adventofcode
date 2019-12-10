@@ -11,8 +11,8 @@ day5 = do
 
   let intCodes = parseProgram input
 
-  let (_, outputP1) = computer [1] intCodes [] 0
+  let outputP1 = runProgramV2 [1] intCodes
   putStrLn ("Part1: " ++ show (outputP1 !! 0))
 
-  let (_, outputP2) = computer [5] intCodes [] 0
+  let outputP2 = runProgramV2 [5] intCodes
   putStrLn ("Part2: " ++ show (outputP2 !! 0))

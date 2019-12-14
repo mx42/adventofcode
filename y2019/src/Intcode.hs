@@ -58,10 +58,10 @@ getInstruction s = Instr opcode param1 param2 param3
         param3 = (m3, getMemoryAt 3)
         getMemoryAt n = (_memory s) ! (n + _index s)
 
-getValueSafe :: State -> (ParamMode, Int) -> Int
-getValueSafe _ (Position, n) = n
-getValueSafe _ (Direct, n) = n
-getValueSafe s (Relative, n) = findWithDefault 0 (n + _relIndex s) (_memory s)
+getWriteAddress :: State -> (ParamMode, Int) -> Int
+getWriteAddress _ (Position, n) = n
+getWriteAddress _ (Direct, n) = n
+getWriteAddress s (Relative, n) = (n + _relIndex s)
 
 getValue :: State -> (ParamMode, Int) -> Int
 getValue s (Position, n) = findWithDefault 0 n (_memory s)
@@ -73,7 +73,7 @@ compute :: State -> Instr -> State
 compute s (Instr OpAdd p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory }
   where newIndex = (_index s) + 4
         newMemory = insert resultIndex result (_memory s)
-        resultIndex = getValueSafe s p3
+        resultIndex = getWriteAddress s p3
         value1 = getValue s p1
         value2 = getValue s p2
         result = value1 + value2
@@ -82,7 +82,7 @@ compute s (Instr OpAdd p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemor
 compute s (Instr OpMult p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory }
   where newIndex = (_index s) + 4
         newMemory = insert resultIndex result (_memory s)
-        resultIndex = getValueSafe s p3
+        resultIndex = getWriteAddress s p3
         value1 = getValue s p1
         value2 = getValue s p2
         result = value1 * value2
@@ -91,14 +91,14 @@ compute s (Instr OpMult p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemo
 compute s (Instr OpRead p1 _ _) = dbg s { _index = newIndex, _memory = newMemory, _input = newInput }
   where newIndex = (_index s) + 2
         newMemory = insert resultIndex value (_memory s)
-        resultIndex = getValueSafe s p1
+        resultIndex = getWriteAddress s p1
         value = head $ _input s
         newInput = tail $ _input s
         dbg x = trace ("READ\t\t[" ++ show value ++ "]\t-> @ [" ++ show resultIndex ++ "] " ++ show p1) x
 -- OPCODE 4 - OUTPUT
 compute s (Instr OpWrite p1 _ _) = dbg s { _index = newIndex, _output = newOutput }
   where newIndex = (_index s) + 2
-        newOutput = value:(_output s)
+        newOutput = (_output s) ++ [value]
         value = getValue s p1
         dbg x = trace ("OUTPUT\t\t" ++ show p1 ++ " [" ++ show value ++ "]") x
 -- OPCODE 5 - JUMP-IF-TRUE
@@ -118,7 +118,7 @@ compute s (Instr OpLT p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory
   where newIndex = (_index s) + 4
         value1 = getValue s p1
         value2 = getValue s p2
-        resultIndex = getValueSafe s p3
+        resultIndex = getWriteAddress s p3
         result = if value1 < value2 then 1 else 0
         newMemory = insert resultIndex result (_memory s)
         dbg x = trace ("LESS-THAN\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
@@ -128,7 +128,7 @@ compute s (Instr OpEq p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory
         value1 = getValue s p1
         value2 = getValue s p2
         result = if value1 == value2 then 1 else 0
-        resultIndex = getValueSafe s p3
+        resultIndex = getWriteAddress s p3
         newMemory = insert resultIndex result (_memory s)
         dbg x = trace ("EQUALS\t\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
 -- OPCODE 9 - REL-OFFSET

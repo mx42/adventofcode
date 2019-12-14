@@ -10,3 +10,6 @@ day9 = do
 
   let outputP1 = runProgramV2 [1] memory
   putStrLn $ "Part1: " ++ show outputP1
+
+  let outputP2 = runProgramV2 [2] memory
+  putStrLn $ "Part2: " ++ show outputP2

@@ -35,7 +35,7 @@ day7 = do
   putStrLn $ "Part 1: " ++ (show p1)
 
   -- WIP
-  let combinationsP2 = testCombinationsP2 program
-  let p2 = maximumBy (\(_, a) (_, b) -> compare a b) combinationsP2
+  -- let combinationsP2 = testCombinationsP2 program
+  -- let p2 = maximumBy (\(_, a) (_, b) -> compare a b) combinationsP2
 
-  putStrLn $ "Part 2 (WIP/Buggy): " ++ (show p2)
+  -- putStrLn $ "Part 2 (WIP/Buggy): " ++ (show p2)

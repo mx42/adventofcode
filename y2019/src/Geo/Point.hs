@@ -6,15 +6,15 @@ module Geo.Point
     sub
   ) where
 
-data Point = Point { x :: Float, y :: Float } deriving (Show)
+data Point = Point { x :: Double, y :: Double } deriving (Show, Eq)
 
-instance Eq Point where
-  (==) (Point x1 y1) (Point x2 y2) = x1 == x2 && y1 == y2
+-- instance Eq Point where
+--   (==) (Point x1 y1) (Point x2 y2) = x1 == x2 && y1 == y2
 
 origin :: Point
 origin = Point 0 0
 
-manhattanDist :: Point -> Point -> Float
+manhattanDist :: Point -> Point -> Double
 manhattanDist a b = abs(x(b) - x(a)) + abs(y(b) - y(a))
 
 add :: Point -> Point -> Point

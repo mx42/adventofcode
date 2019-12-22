@@ -1,11 +1,13 @@
-module Intcode (parseProgram, runProgramV1, runProgramV2, runProgramV3) where
+module Intcode (parseProgram, runProgramV1, runProgramV2, runProgramV3, runProgramPaint) where
 
 import Data.Map
 import Data.List.Split
 import Data.Char
 
 -- import Debug.Trace
-trace _ x = x
+-- trace _ x = x
+
+trace' _ x = x
 
 data ParamMode = Position | Direct | Relative deriving (Show)
 
@@ -77,7 +79,7 @@ compute s (Instr OpAdd p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemor
         value1 = getValue s p1
         value2 = getValue s p2
         result = value1 + value2
-        dbg x = trace ("ADD\t\t"++ show p1 ++ " [" ++ show value1 ++ "] + "++ show p2 ++" [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] " ++ show p3) x
+        dbg x = trace' ("ADD\t\t"++ show p1 ++ " [" ++ show value1 ++ "] + "++ show p2 ++" [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] " ++ show p3) x
 -- OPCODE 2 - MULTIPLICATION
 compute s (Instr OpMult p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory }
   where newIndex = (_index s) + 4
@@ -86,7 +88,7 @@ compute s (Instr OpMult p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemo
         value1 = getValue s p1
         value2 = getValue s p2
         result = value1 * value2
-        dbg x = trace ("MULT\t\t" ++ show p1 ++ " [" ++ show value1 ++ "] * "++ show p2++" [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
+        dbg x = trace' ("MULT\t\t" ++ show p1 ++ " [" ++ show value1 ++ "] * "++ show p2++" [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
 -- OPCODE 3 - READ
 compute s (Instr OpRead p1 _ _) = dbg s { _index = newIndex, _memory = newMemory, _input = newInput }
   where newIndex = (_index s) + 2
@@ -94,25 +96,25 @@ compute s (Instr OpRead p1 _ _) = dbg s { _index = newIndex, _memory = newMemory
         resultIndex = getWriteAddress s p1
         value = head $ _input s
         newInput = tail $ _input s
-        dbg x = trace ("READ\t\t[" ++ show value ++ "]\t-> @ [" ++ show resultIndex ++ "] " ++ show p1) x
+        dbg x = trace' ("READ\t\t[" ++ show value ++ "]\t-> @ [" ++ show resultIndex ++ "] " ++ show p1) x
 -- OPCODE 4 - OUTPUT
 compute s (Instr OpWrite p1 _ _) = dbg s { _index = newIndex, _output = newOutput }
   where newIndex = (_index s) + 2
         newOutput = (_output s) ++ [value]
         value = getValue s p1
-        dbg x = trace ("OUTPUT\t\t" ++ show p1 ++ " [" ++ show value ++ "]") x
+        dbg x = trace' ("OUTPUT\t\t" ++ show p1 ++ " [" ++ show value ++ "]") x
 -- OPCODE 5 - JUMP-IF-TRUE
 compute s (Instr OpJumpEq p1 p2 _) = dbg s { _index = newIndex }
   where value = getValue s p1
         jumpTo = getValue s p2
         newIndex = if value /= 0 then jumpTo else (_index s) + 3
-        dbg x = trace ("JUMP-IF-TRUE\t" ++ show p1 ++ " [" ++ show value ++ "] JMP TO " ++ show p2 ++ " [" ++ show jumpTo ++ "]\t-> INDEX " ++ show newIndex) x
+        dbg x = trace' ("JUMP-IF-TRUE\t" ++ show p1 ++ " [" ++ show value ++ "] JMP TO " ++ show p2 ++ " [" ++ show jumpTo ++ "]\t-> INDEX " ++ show newIndex) x
 -- OPCODE 6 - JUMP-IF-FALSE
 compute s (Instr OpJumpNeq p1 p2 _) = dbg s { _index = newIndex }
   where value = getValue s p1
         jumpTo = getValue s p2
         newIndex = if value == 0 then jumpTo else (_index s) + 3
-        dbg x = trace ("JUMP-IF-FALSE\t" ++ show p1 ++ " [" ++ show value ++ "] JMP TO " ++ show p2 ++ " [" ++ show jumpTo ++ "]\t-> INDEX " ++ show newIndex) x
+        dbg x = trace' ("JUMP-IF-FALSE\t" ++ show p1 ++ " [" ++ show value ++ "] JMP TO " ++ show p2 ++ " [" ++ show jumpTo ++ "]\t-> INDEX " ++ show newIndex) x
 -- OPCODE 7 - LESS-THAN
 compute s (Instr OpLT p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory }
   where newIndex = (_index s) + 4
@@ -121,7 +123,7 @@ compute s (Instr OpLT p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory
         resultIndex = getWriteAddress s p3
         result = if value1 < value2 then 1 else 0
         newMemory = insert resultIndex result (_memory s)
-        dbg x = trace ("LESS-THAN\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
+        dbg x = trace' ("LESS-THAN\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
 -- OPCODE 8 - EQUALS
 compute s (Instr OpEq p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory }
   where newIndex = (_index s) + 4
@@ -130,17 +132,17 @@ compute s (Instr OpEq p1 p2 p3) = dbg s { _index = newIndex, _memory = newMemory
         result = if value1 == value2 then 1 else 0
         resultIndex = getWriteAddress s p3
         newMemory = insert resultIndex result (_memory s)
-        dbg x = trace ("EQUALS\t\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
+        dbg x = trace' ("EQUALS\t\t" ++ show p1 ++ " [" ++ show value1 ++ "] vs " ++ show p2 ++ " [" ++ show value2 ++ "] =\t[" ++ show result ++ "]\t-> @ [" ++ show resultIndex ++ "] "++ show p3) x
 -- OPCODE 9 - REL-OFFSET
 compute s (Instr OpOffset p1 _ _) = dbg s { _index = newIndex, _relIndex = newRelIndex }
   where value = getValue s p1
         newIndex = (_index s) + 2
         relIndex = _relIndex s
         newRelIndex = value + relIndex
-        dbg x = trace ("REL-OFFSET\t" ++ show p1 ++ " [" ++ show value ++ "] + CUR [" ++ show relIndex ++ "] =\t[" ++ show newRelIndex ++ "]") x
+        dbg x = trace' ("REL-OFFSET\t" ++ show p1 ++ " [" ++ show value ++ "] + CUR [" ++ show relIndex ++ "] =\t[" ++ show newRelIndex ++ "]") x
 -- OPCODE 99 - EXIT
 compute s (Instr OpExit _ _ _) = dbg s { _running = False }
-  where dbg x = trace ("EXIT") x
+  where dbg x = trace' ("EXIT") x
 
 -- ELSE: NOT HANDLED
 -- compute s (Instr n _ _ _) = trace ("Unhandled opcode " ++ show n) s { _running = False }
@@ -183,3 +185,38 @@ chainProcesses (amp:nextAmps) input
         instr = getInstruction amp
         instrOp = _opcode(instr)
         out = head (_output amp)
+
+-- directions: 0 = top, 1 = right, 2 = bot, 3 = left
+paintProgram :: State -> (Int, Int) -> Int -> Map (Int, Int) Int -> Map (Int, Int) Int
+paintProgram state curPos curDir painting
+  | _running(state) == False = painting
+  | instrOp == OpRead = paintProgram paintState newPos newDir newPainting
+  | otherwise = paintProgram normalState curPos curDir painting
+  where normalState = compute state instr
+        paintState = compute state {
+          _input = [findWithDefault 0 newPos painting], _output = []} instr
+        instr = getInstruction state
+        instrOp = _opcode instr
+        paintOutput = _output state
+        newPainting = if not (Prelude.null paintOutput)
+                      then insert curPos (paintOutput !! 0) painting
+                      else painting
+        turn = paintOutput !! 1
+        newDir = if not (Prelude.null paintOutput)
+                 then applyTurn turn curDir
+                 else curDir
+        applyTurn 0 cur = mod (cur - 1) 4
+        applyTurn 1 cur = mod (cur + 1) 4
+        newPos = if not (Prelude.null paintOutput)
+                 then move curPos newDir
+                 else curPos
+        move (x, y) 0 = (x, y - 1)
+        move (x, y) 1 = (x + 1, y)
+        move (x, y) 2 = (x, y + 1)
+        move (x, y) 3 = (x - 1, y)
+
+runProgramPaint :: [Int] -> Int -> Map (Int, Int) Int
+runProgramPaint mem initial = paintProgram initialState (0, 0) 0 (initialPaint initial)
+  where initialState = State 0 0 [initial] [] (makeMemory mem) True
+        initialPaint 0 = empty
+        initialPaint 1 = fromList [((0, 0), 1)]

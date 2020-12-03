@@ -25,6 +25,8 @@ dependencies:
 - sort
 - split
 - directory
+- pureMD5
+- utf8-string
 
 library:
   source-dirs: src

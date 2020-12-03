@@ -1,3 +1,5 @@
+module Y2015.Day03 (y15day03) where
+
 import Data.List
 
 move :: [(Int, Int)] -> Char -> [(Int, Int)]
@@ -26,3 +28,8 @@ day3part1 input = length (uniqueHouses (houses input))
 
 day3part2 :: [Char] -> Int
 day3part2 input = length (uniqueHouses (housesWithBot input))
+
+y15day03 :: [String] -> (String, String)
+y15day03 (input:_) = (part1, part2)
+  where part1 = show $ day3part1 input
+        part2 = show $ day3part2 input

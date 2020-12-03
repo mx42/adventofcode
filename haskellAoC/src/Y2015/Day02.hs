@@ -1,3 +1,5 @@
+module Y2015.Day02 (y15day02) where
+
 import Data.List.Split
 
 computeSides :: [Int] -> [Int]
@@ -30,18 +32,8 @@ part1computation dims = computeWrapping dims + computeSlack dims
 part2computation :: [Int] -> Int
 part2computation dims = computeRibbonWrap dims + computeRibbonBow dims
 
-day2 :: ([Int] -> Int) -> String -> Int
-day2 fn input = sum paper
-  where entries = lines input
-        dims = map parseDims entries
-        paper = map fn dims
-
-main :: IO ()
-main = do
-  input <- getContents
-  putStr "Part1: "
-  print (day2 part1computation input)
-  putStrLn ""
-  putStr "Part2: "
-  print (day2 part2computation input)
-  putStrLn ""
+y15day02 :: [String] -> (String, String)
+y15day02 input = (part1, part2)
+  where part1 = show $ compute part1computation
+        part2 = show $ compute part2computation
+        compute fn = sum $ map fn $ map parseDims input

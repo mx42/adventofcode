@@ -1,7 +1,4 @@
-module Y2019.Days (y19day01, y19day02, y19day03, y19day04, y19day05, y19day06,
-                   y19day07, y19day08, y19day09, y19day10, y19day11, y19day12,
-                   y19day13
-                  ) where
+module Y2019.Days (year2019) where
 
 import Y2019.Day01
 import Y2019.Day02
@@ -17,16 +14,17 @@ import Y2019.Day11
 import Y2019.Day12
 import Y2019.Day13
 
-y19day01 = day1
-y19day02 = day2
-y19day03 = day3
-y19day04 = day4
-y19day05 = day5
-y19day06 = day6
-y19day07 = day7
-y19day08 = day8
-y19day09 = day9
-y19day10 = day10
-y19day11 = day11
-y19day12 = day12
-y19day13 = day13
+year2019 :: String -> [String] -> (String, String)
+year2019 "01" = day1
+year2019 "02" = day2
+year2019 "03" = day3
+year2019 "04" = day4
+year2019 "05" = day5
+year2019 "06" = day6
+year2019 "07" = day7
+year2019 "08" = day8
+year2019 "09" = day9
+year2019 "10" = day10
+year2019 "11" = day11
+year2019 "12" = day12
+year2019 "13" = day13

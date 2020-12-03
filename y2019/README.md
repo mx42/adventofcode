@@ -1,4 +1,0 @@
-# Advent of Code 2019
-https://adventofcode.com/2019
-
-A good occasion to try Haskell.

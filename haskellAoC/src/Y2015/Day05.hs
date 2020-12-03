@@ -1,5 +1,7 @@
 module Y2015.Day05 (y15day05) where
 
+import Data.List
+
 has3vowels :: String -> Bool
 has3vowels input = (>= 3) $ length $ filter (`elem` "aeiou") input
 
@@ -15,16 +17,15 @@ noForbiddenStr (x:x2:xs)
   | otherwise = noForbiddenStr (x2:xs)
 noForbiddenStr _ = True
 
-contains :: String -> String -> Bool
-contains _ [] = True
-contains [] _ = False
-contains (x:xs) (y:ys)
-  | x == y = contains xs ys
-  | otherwise = contains xs (y:ys)
+contains :: String -> (Char, Char) -> Bool
+contains (x:xs@(y:_)) p@(a, b)
+  | (x == a && y == b) = True
+  | otherwise = contains xs p
+contains _ _ = False
 
 repeatedTwoLetters :: String -> Bool
 repeatedTwoLetters (x1:x2:xs)
-  | xs `contains` (x1:[x2]) = True
+  | xs `contains` (x1, x2) = True
   | otherwise = repeatedTwoLetters (x2:xs)
 repeatedTwoLetters _ = False
 
@@ -42,4 +43,4 @@ y15day05 input = (part1, part2)
     applyRules rules pwd = all (== True) $ map ($ pwd) rules
     countCorrectPwd rules = length $ filter (== True) $ map (applyRules rules) input
     part1 = show $ countCorrectPwd part1rules
-    part2 = "WIP, invalid: " ++ (show $ countCorrectPwd part2rules)
+    part2 = show $ countCorrectPwd part2rules

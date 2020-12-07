@@ -22,10 +22,11 @@ description:         Please see the README on GitHub at <https://github.com/mx42
 dependencies:
 - base >= 4.7 && < 5
 - containers
+- directory
+- memoize
+- pureMD5
 - sort
 - split
-- directory
-- pureMD5
 - utf8-string
 
 library:

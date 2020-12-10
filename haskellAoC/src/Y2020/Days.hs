@@ -9,6 +9,7 @@ import Y2020.Day06
 import Y2020.Day07
 import Y2020.Day08
 import Y2020.Day09
+import Y2020.Day10
 
 year2020 :: String -> [String] -> (String, String)
 year2020 "01" = y20day01
@@ -20,3 +21,4 @@ year2020 "06" = y20day06
 year2020 "07" = y20day07
 year2020 "08" = y20day08
 year2020 "09" = y20day09
+year2020 "10" = y20day10

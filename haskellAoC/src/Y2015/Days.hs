@@ -11,6 +11,8 @@ import Y2015.Day08
 import Y2015.Day09
 import Y2015.Day10
 import Y2015.Day11
+import Y2015.Day12
+
 
 year2015 :: String -> [String] -> (String, String)
 year2015 "01" = y15day01
@@ -24,3 +26,4 @@ year2015 "08" = y15day08
 year2015 "09" = y15day09
 year2015 "10" = y15day10
 year2015 "11" = y15day11
+year2015 "12" = y15day12

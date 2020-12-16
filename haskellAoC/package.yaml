@@ -20,15 +20,19 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/mx42/haskellAoC#readme>
 
 dependencies:
+- aeson
 - base >= 4.7 && < 5
 - containers
 - directory
 - matrix
 - memoize
 - pureMD5
+- scientific
 - sort
 - split
+- unordered-containers
 - utf8-string
+- vector
 
 library:
   source-dirs: src

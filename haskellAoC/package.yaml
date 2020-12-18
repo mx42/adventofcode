@@ -30,6 +30,7 @@ dependencies:
 - scientific
 - sort
 - split
+- text
 - unordered-containers
 - utf8-string
 - vector

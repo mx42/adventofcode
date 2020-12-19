@@ -19,7 +19,7 @@ evaluate input = fst $ foldl doOp (0, "") input
         doOp (res, "+") c = (res + (read c), "")
         doOp (res, "*") c = (res * (read c), "")
         doOp (res, "")  c = (res, c)
-        doOp e c          = error ("Invalid fold on " ++ show (e,c) ++ " in " ++ input)
+        doOp e c          = error ("Invalid fold on " ++ show (e,c) ++ " in " ++ show input)
 
 -- Evaluate an expression (for part 2) by doing +'s first then calling P1 evaluate function
 evaluateP2 :: [String] -> Int
